@@ -1,0 +1,1 @@
+{"Uid":"027F1DF406E000","ReadOnly":false,"DataLength":21,"CanMakeReadOnly":true,"Formatted":true,"Records":[{"LanguageCode":5,"Text":"This is test 1","EncodingType":0,"RecordType":"Text"}],"TagTech":"STN25TN01K","MaxDataLength":256,"Exception":null}

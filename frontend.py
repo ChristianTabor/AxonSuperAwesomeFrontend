@@ -9,7 +9,7 @@ def open_popup(self, text: str):
     top = Toplevel(self)
     top.geometry("250x150")
     top.title("Error")
-    Label(top, text=text, font=('arial 8 bold'), justify='center').place(x=125, y=75)
+    Label(top, text=text, font='arial 8 bold', justify='center').place(x=125, y=75)
 
 
 class tkinterApp(tk.Tk):
@@ -31,7 +31,7 @@ class tkinterApp(tk.Tk):
 
         # iterating through a tuple consisting
         # of the different page layouts
-        for F in (StartPage, NewUser, Page2):
+        for F in (StartPage, NewUser, Page2, NewBooth, NewEvent):
             frame = F(container, self)
 
             # initializing frame of that object from
@@ -59,13 +59,13 @@ class StartPage(tk.Frame):
         tk.Frame.__init__(self, parent)
 
         # label of frame Layout 2
-        label = Label(self, text="Startpage", font=LARGEFONT)
+        label = Label(self, text="Home", font=LARGEFONT)
 
         # putting the grid in its place by using
         # grid
         label.grid(row=0, column=4, padx=10, pady=10)
 
-        button1 = Button(self, text="Page 1",
+        button1 = Button(self, text="Register A New User",
                          command=lambda: controller.show_frame(NewUser))
 
         # putting the button in its place by
@@ -80,10 +80,25 @@ class StartPage(tk.Frame):
         # using grid
         button2.grid(row=2, column=1, padx=10, pady=10)
 
-        button3 = Button(self, text="Error Test",
-                         command=lambda: open_popup(self, "Herro"))
+        button3 = Button(self, text="Reset All Badges",
+                         command=unregisterall())
 
         button3.grid(row=3, column=1, padx=10, pady=10)
+
+        button4 = Button(self, text="Error Test",
+                         command=lambda: open_popup(self, "Herro"))
+
+        button4.grid(row=4, column=1, padx=10, pady=10)
+
+        button5 = Button(self, text="Add New Event",
+                         command=lambda: controller.show_frame(NewEvent))
+
+        button5.grid(row=5, column=1, padx=10, pady=10)
+
+        button6 = Button(self, text="Add New Booth",
+                         command=lambda: controller.show_frame(NewBooth))
+
+        button6.grid(row=6, column=1, padx=10, pady=10)
 
 
 # second window frame page1
@@ -135,6 +150,76 @@ class NewUser(Frame):
             clear()
 
         Button(self, text='Register', command=getvals, font='arial 8 bold').grid(row=6, column=2)
+
+
+class NewEvent(Frame):
+
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        label = Label(self, text="Page 1", font=LARGEFONT)
+        label.grid(row=0, column=4, padx=10, pady=10)
+
+        Label(self, text="Name:").grid(row=1, column=1)
+        Label(self, text="Location:").grid(row=2, column=1)
+        Label(self, text="ZIP Code:").grid(row=3, column=1)
+
+        nameVal = StringVar()
+        locationVal = StringVar()
+        zipVal = StringVar()
+
+        Entry(self, textvariable=nameVal).grid(row=1, column=2, ipadx=20)
+        Entry(self, textvariable=locationVal).grid(row=2, column=2, ipadx=20)
+        Entry(self, textvariable=zipVal).grid(row=3, column=2, ipadx=20)
+
+        def clear():
+            # clear the content of text entry box
+            nameVal.set("")
+            locationVal.set("")
+            zipVal.set("")
+
+        # Function just get the data from entry box and displaying it to console
+        # Then calling clear() to set entry box ''
+        def getvals():
+            print(nameVal.get())
+            print(locationVal.get())
+            print(zipVal.get())
+            zipNum = int(zipVal.get())
+            print(zipNum)
+            lastid = insert_event(nameVal.get(), locationVal.get(), zipNum)
+            print(lastid)
+            open_popup(self, "Event Added With Id:{}".format(zipNum))
+            clear()
+
+        Button(self, text='Register', command=getvals, font='arial 8 bold').grid(row=4, column=2)
+
+
+class NewBooth(Frame):
+
+    def __init__(self, parent, controller):
+        Frame.__init__(self, parent)
+        label = Label(self, text="Page 1", font=LARGEFONT)
+        label.grid(row=0, column=4, padx=10, pady=10)
+
+        Label(self, text="Name:").grid(row=1, column=1)
+
+        nameVal = StringVar()
+
+        Entry(self, textvariable=nameVal).grid(row=1, column=2, ipadx=20)
+
+        def clear():
+            # clear the content of text entry box
+            nameVal.set("")
+
+        # Function just get the data from entry box and displaying it to console
+        # Then calling clear() to set entry box ''
+        def getvals():
+            print(nameVal.get())
+            lastid = insert_booth(nameVal.get())
+            print(lastid)
+            open_popup(self, "Booth Added With Id:{}".format(lastid))
+            clear()
+
+        Button(self, text='Add New Booth', command=getvals, font='arial 8 bold').grid(row=2, column=2)
 
 
 # third window frame page2

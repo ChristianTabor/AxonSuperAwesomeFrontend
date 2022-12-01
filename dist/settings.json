@@ -1,0 +1,8 @@
+{
+  "BoothId": 1,
+  "Host": "localhost",
+  "Database": "AXON_DATA",
+  "User": "root",
+  "Password": "Passwordxyz!",
+  "Port": "3308"
+}

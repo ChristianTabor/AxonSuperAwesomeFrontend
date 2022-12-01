@@ -1,15 +1,47 @@
 import mysql.connector
 import datetime
+import json
+import sys
+
+import objectpath
+import os
 
 
 def connect():
     global connection, cursor
     try:
-        connection = mysql.connector.connect(host='localhost', database='AXON_DATA', user='root',
-                                             password='Passwordxyz!', port='3308')
+        f = os.path.join(os.path.dirname(sys.executable), 'settings.json')
+        tree_obj = objectpath.Tree(json.load(open(f, 'r', encoding="utf8")))
+
+        host_iterator = tree_obj.execute('$..Host')
+        host = ''
+        for auto in host_iterator:
+            host += auto
+
+        database_iterator = tree_obj.execute('$..Database')
+        database = ''
+        for auto in database_iterator:
+            database += auto
+
+        user_iterator = tree_obj.execute('$..User')
+        user = ''
+        for auto in user_iterator:
+            user += auto
+
+        password_iterator = tree_obj.execute('$..Password')
+        password = ''
+        for auto in password_iterator:
+            password += auto
+
+        port_iterator = tree_obj.execute('$..Port')
+        port = ''
+        for auto in port_iterator:
+            port += auto
+
+        connection = mysql.connector.connect(host=host, database=database, user=user,
+                                             password=password, port=port)
         cursor = connection.cursor(buffered=True)
         print("MySQL connection is opened")
-        # use config file to do all this password shit
 
     except mysql.connector.Error as error:
         print("Failed to insert record into Laptop table {}".format(error))
